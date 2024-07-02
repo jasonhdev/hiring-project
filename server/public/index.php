@@ -98,10 +98,16 @@ $app->post(
             ]
           ]);
       } else {
+
+        $errors = [];
+        foreach ($candidate->getMessages() as $message) {
+          $errors[] = $message->getMessage();
+        }
+
         $response
           ->setStatusCode(422)
           ->setJSONContent([
-            'errors' => $candidate->getMessages()
+            'errors' => $errors
           ]);
       }
     } catch (Exception $e) {

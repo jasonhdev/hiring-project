@@ -4,6 +4,7 @@ import { tracked } from '@glimmer/tracking';
 
 export default class CandidatesController extends Controller {
   @tracked showCandidateForm = false;
+  @tracked candidateFormErrors = "";
   @tracked candidate = {
     name: '',
     age: '',
@@ -25,11 +26,11 @@ export default class CandidatesController extends Controller {
     }
 
     if (!this.candidate.name) {
-      alert('Name is required');
+      this.candidateFormErrors = 'Candidate name is required';
       return;
     }
     if (!this.candidate.age) {
-      alert('Age is required');
+      this.candidateFormErrors = 'Candidate age is required';
       return;
     }
 
@@ -42,13 +43,12 @@ export default class CandidatesController extends Controller {
       .save()
       .then(() => {
         this.model = this.store.query('applicant', {});
+        this.clearForm();
       })
       .catch((e) => {
-        alert(e);
-        console.log(e);
+        this.candidateFormErrors = e.errors.toArray().join(". ");
+        console.log(e.errors);
       });
-
-    this.clearForm();
   }
 
   @action
@@ -58,5 +58,6 @@ export default class CandidatesController extends Controller {
       age: '',
     };
     this.showCandidateForm = false;
+    this.candidateFormErrors = "";
   }
 }

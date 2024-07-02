@@ -13,12 +13,12 @@
 {{/each}}
 
 {{#if this.showCandidateForm}}
-{{!-- TODO: Display errors --}}
 <form {{action "submitCandidate" on="submit" }}>
-  <label for="candidate-name">Name:</label>
-  <Input id="candidate-name" @type="text" @value={{this.candidate.name}} @placeholder="John Doe" autofocus="true" required="true"/>
-  <label for="candidate-age">Age:</label>
-  <Input id="candidate-age" @type="number" min="18" max="150" @value={{this.candidate.age}} @placeholder="18"
+  <div id="candidateFormErrors">{{this.candidateFormErrors}}</div>
+  <label for="candidateName">Name:</label>
+  <Input id="candidateName" @type="text" @value={{this.candidate.name}} @placeholder="John Doe" autofocus="true" required="true"/>
+  <label for="candidateAge">Age:</label>
+  <Input id="candidateAge" @type="number" min="18" max="150" @value={{this.candidate.age}} @placeholder="18"
     required />
   <button class="btn btn-primary" {{action 'submitCandidate' }}>Save</button>
   <button class="btn btn-primary" {{action 'clearForm' }}>Cancel</button>

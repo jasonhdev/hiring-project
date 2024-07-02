@@ -5,9 +5,9 @@ import { tracked } from '@glimmer/tracking';
 export default class CandidatesController extends Controller {
   @tracked showCandidateForm = false;
   @tracked candidate = {
-    'name': '',
-    'age': ''
-  }
+    name: '',
+    age: '',
+  };
 
   @action
   addNew() {
@@ -16,10 +16,9 @@ export default class CandidatesController extends Controller {
 
   @action
   submitCandidate() {
-
     // TODO: Remove after testing
     if (!this.candidate.name) {
-      this.candidate.name = "Tester";
+      this.candidate.name = 'Tester';
     }
     if (!this.candidate.age) {
       this.candidate.age = 12;
@@ -39,12 +38,15 @@ export default class CandidatesController extends Controller {
       age: this.candidate.age,
     });
 
-    newCandidate.save().then(() => {
-      this.model = this.store.query('applicant', {});
-    }).catch((e) => {
-      alert(e);
-      console.log(e);
-    });
+    newCandidate
+      .save()
+      .then(() => {
+        this.model = this.store.query('applicant', {});
+      })
+      .catch((e) => {
+        alert(e);
+        console.log(e);
+      });
 
     this.clearForm();
   }
@@ -52,9 +54,9 @@ export default class CandidatesController extends Controller {
   @action
   clearForm() {
     this.candidate = {
-      'name': '',
-      'age': ''
-    }
+      name: '',
+      age: '',
+    };
     this.showCandidateForm = false;
   }
 }

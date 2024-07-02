@@ -1,0 +1,27 @@
+.content {
+    margin: auto;
+    width: 50%;
+}
+
+.candidateRow {
+    border: 1px solid lightgrey;
+    margin: 5px 0;
+    border-radius: 8px;
+    padding-left: 10px;
+}
+
+form {
+    border: 2px solid lightgrey;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+form>button {
+    margin-top: 5px;
+}
+
+#addNewBtn {
+    display: block;
+    float: right;
+}

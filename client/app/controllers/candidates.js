@@ -5,6 +5,7 @@ import { tracked } from '@glimmer/tracking';
 export default class CandidatesController extends Controller {
   @tracked showCandidateForm = false;
   @tracked candidateFormErrors = "";
+  @tracked successMessage = "";
   @tracked candidate = {
     name: '',
     age: '',
@@ -17,14 +18,6 @@ export default class CandidatesController extends Controller {
 
   @action
   submitCandidate() {
-    // TODO: Remove after testing
-    if (!this.candidate.name) {
-      this.candidate.name = 'Tester';
-    }
-    if (!this.candidate.age) {
-      this.candidate.age = 12;
-    }
-
     if (!this.candidate.name) {
       this.candidateFormErrors = 'Candidate name is required';
       return;
@@ -41,9 +34,13 @@ export default class CandidatesController extends Controller {
 
     newCandidate
       .save()
-      .then(() => {
+      .then((newCandidate) => {
         this.model = this.store.query('applicant', {});
-        this.clearForm();
+        this.successMessage = "Successfully added Candidate " + newCandidate.name;
+
+        setTimeout(() => {
+          this.successMessage = "";
+        }, 4500);
       })
       .catch((e) => {
         this.candidateFormErrors = e.errors.toArray().join(". ");

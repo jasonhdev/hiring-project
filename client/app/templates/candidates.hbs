@@ -1,28 +1,37 @@
 {{page-title "Candidates"}}
 {{outlet}}
 
-<h1>Listing candidates</h1>
+<div class="content">
+  <h1>Listing candidates</h1>
 
-{{#each model as |applicant|}}
-<div>
-  <h2>{{applicant.name}}</h2>
-  <p>Age: {{applicant.age}}</p>
+  {{#if this.successMessage}}
+  <div class="alert alert-success">{{this.successMessage}}</div>
+  {{/if}}
+
+  {{#each model as |applicant|}}
+  <div class="candidateRow">
+    <h2>{{applicant.name}}</h2>
+    <p>Age: {{applicant.age}}</p>
+  </div>
+  {{else}}
+  <div>No records found</div>
+  {{/each}}
+
+  {{#if this.showCandidateForm}}
+  <form {{action "submitCandidate" on="submit" }}>
+    {{#if this.candidateFormErrors}}
+    <div id="candidateFormErrors" class="alert alert-danger">{{this.candidateFormErrors}}</div>
+    {{/if}}
+    <label for="candidateName">Name:</label>
+    <Input id="candidateName" @type="text" @value={{this.candidate.name}} @placeholder="John Doe" autofocus="true" />
+    <label for="candidateAge">Age:</label>
+    <Input id="candidateAge" @type="number" min="18" max="150" @value={{this.candidate.age}} @placeholder="18" />
+    <br>
+    <button class="btn btn-info" {{action 'submitCandidate' }}>Save</button>
+    <button class="btn btn-outline-secondary" {{action 'clearForm' }}>Cancel</button>
+  </form>
+  {{/if}}
+
+  <button id="addNewBtn" class="btn btn-primary" {{on 'click' (action 'addNew' )}}
+    disabled={{this.showCandidateForm}}>Add new</button>
 </div>
-{{else}}
-<div>No records found</div>
-{{/each}}
-
-{{#if this.showCandidateForm}}
-<form {{action "submitCandidate" on="submit" }}>
-  <div id="candidateFormErrors">{{this.candidateFormErrors}}</div>
-  <label for="candidateName">Name:</label>
-  <Input id="candidateName" @type="text" @value={{this.candidate.name}} @placeholder="John Doe" autofocus="true" required="true"/>
-  <label for="candidateAge">Age:</label>
-  <Input id="candidateAge" @type="number" min="18" max="150" @value={{this.candidate.age}} @placeholder="18"
-    required />
-  <button class="btn btn-primary" {{action 'submitCandidate' }}>Save</button>
-  <button class="btn btn-primary" {{action 'clearForm' }}>Cancel</button>
-</form>
-{{/if}}
-
-<button {{on 'click' (action 'addNew' )}} disabled={{this.showCandidateForm}}>Add new</button>

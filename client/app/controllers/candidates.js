@@ -4,8 +4,8 @@ import { tracked } from '@glimmer/tracking';
 
 export default class CandidatesController extends Controller {
   @tracked showCandidateForm = false;
-  @tracked candidateFormErrors = "";
-  @tracked successMessage = "";
+  @tracked candidateFormErrors = '';
+  @tracked successMessage = '';
   @tracked candidate = {
     name: '',
     age: '',
@@ -18,34 +18,33 @@ export default class CandidatesController extends Controller {
 
   @action
   submitCandidate() {
-    if (!this.candidate.name) {
-      this.candidateFormErrors = 'Candidate name is required';
-      return;
-    }
-    if (!this.candidate.age) {
-      this.candidateFormErrors = 'Candidate age is required';
-      return;
-    }
-
     let newCandidate = this.store.createRecord('applicant', {
       name: this.candidate.name,
       age: this.candidate.age,
     });
 
-    newCandidate
-      .save()
-      .then((newCandidate) => {
-        this.model = this.store.query('applicant', {});
-        this.successMessage = "Successfully added Candidate " + newCandidate.name;
+    if (newCandidate.isValid) {
+      newCandidate
+        .save()
+        .then((newCandidate) => {
+          this.model = this.store.query('applicant', {});
+          this.successMessage =
+            'Successfully added Candidate ' + newCandidate.name;
 
-        setTimeout(() => {
-          this.successMessage = "";
-        }, 4500);
-      })
-      .catch((e) => {
-        this.candidateFormErrors = e.errors.toArray().join(". ");
-        console.log(e.errors);
-      });
+          setTimeout(() => {
+            this.successMessage = '';
+          }, 4500);
+        })
+        .catch((e) => {
+          // Catch validation errors from server
+          this.candidateFormErrors = e.errors.toArray().join('. ');
+          console.log(e.errors);
+        });
+    } else {
+      this.candidateFormErrors = newCandidate.validationErrors
+        .toArray()
+        .join('. ');
+    }
   }
 
   @action
@@ -55,6 +54,6 @@ export default class CandidatesController extends Controller {
       age: '',
     };
     this.showCandidateForm = false;
-    this.candidateFormErrors = "";
+    this.candidateFormErrors = '';
   }
 }
